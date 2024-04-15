@@ -53,6 +53,8 @@
         </div>
     </div>
         
+    <a href="{{ route('comics.edit', $comic->id) }}" class="btn btn-warning">Modifica</a>
+
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Elimina
     </button>

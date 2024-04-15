@@ -2,7 +2,11 @@
 
 @section('content')
 
-<table class="table">
+<div class="container py-5">
+
+  <h1 class="mb-4">Database Fumetti</h1>
+
+  <table class="table mb-5">
     <thead>
       <tr>
         <th scope="col">Titolo</th>
@@ -17,7 +21,7 @@
         <tr>
             <td>{{$comic->title}}</td>
             <td>{{$comic->artists}}</td>
-            <td><a href="" class="btn btn-info">Visualizza</a></td>
+            <td><a href="{{ route('comics.show', $comic->id) }}" class="btn btn-info">Visualizza</a></td>
         </tr>
 
         @endforeach
@@ -26,5 +30,8 @@
 
     </tbody>
   </table>
+
+  <a href="{{ route('comics.create') }}" class="btn btn-primary">Aggiungi</a>
+</div>
 
 @endsection

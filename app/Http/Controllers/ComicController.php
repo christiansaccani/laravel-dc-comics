@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ComicController extends Controller
 {
@@ -30,6 +31,11 @@ class ComicController extends Controller
      */
     public function store(Request $request)
     {
+        // codice per validare la nostra richiesta
+        // fare i controlli opportuni per far sì che i dati siano validi prima di essere inseriti nel db
+
+        $this->validation($request->all());
+        
         // creo un nuovo fumetto con i dati ricevuti attraverso la richiesta POST del form
 
         $newComic = new Comic();
@@ -75,6 +81,8 @@ class ComicController extends Controller
      */
     public function update(Request $request, Comic $comic)
     {
+        $this->validation($request->all());
+        
         // codice per modificare il record 
         $comic->title = $request->title;
         $comic->description = $request->description;
@@ -100,4 +108,45 @@ class ComicController extends Controller
 
         return redirect()->route('comics.index');
     }
+
+
+    // creiamo una funzione privata per i controlli di validazione e la comunicazione dei messaggi di errore
+    // che poi richiameremo per il metodo store e il metodo update
+    private function validation($data) {
+
+        // quando facciamo l'import di questa classe dobbiamo fare attenzione ad importare quello presente in Support\Facades.
+        $validator = Validator::make($data, [
+            'title' => 'required|max:255',
+            'description' => 'required|max:1000',
+            'thumb' => 'required',
+            'price' => 'required|max:7',
+            'series' => 'required|max:100',
+            'sale_date' => 'required',
+            'type' => 'required|max:100',
+        ], [
+            'title.required' => 'Il titolo deve essere inserito',
+            'title.max' => "Il titolo deve avere massimo :max caratteri",
+            'description.max' => "La descrizione deve avere massimo :max caratteri",
+            'description.required' => 'La descrizione deve essere inserita',
+            'thumb.required' => "L'immagine deve essere inserita",
+            'price.required' => 'Il prezzo deve essere inserito',
+            'price.max' => "Il prezzo deve avere massimo :max caratteri",
+            'series.required' => 'La serie deve essere inserito',
+            'series.max' => "La serie deve avere massimo :max caratteri",
+            'sale_date.required' => "La data di pubblicazione deve essere inserita",
+            'type.required' => 'Il tipo deve essere inserito',
+            'type.max' => "Il tipo deve avere massimo :max caratteri",
+
+            // 'max' => "Il campo :attribute deve avere massimo :max caratteri", // possiamo creare messaggi generali per regole condivise tra più campi
+            // 'required' => "Il campo :attribute deve avere inserito", // possiamo creare messaggi generali per regole condivise tra più campi
+            
+        ])->validate();
+        // tramite il metodo validate() controlliamo delle regole scelte da noi per i vari campi che riceviamo dal form
+        // in caso le validazioni non vadano a buon fine (ne basta una sbagliata), laravel in automatico farà tornare l'utente indietro
+        // e fornirà alla pagina precedente le indicazioni sull'errore
+        
+
+    }
 }
+
+

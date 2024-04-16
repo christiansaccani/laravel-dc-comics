@@ -10,7 +10,7 @@
         
         <div class="mb-3">
             <label for="title" class="form-label">Titolo</label>
-            <input type="text" class="form-control" name="title" id="title" aria-describedby="emailHelp" required>
+            <input type="text" class="form-control" name="title" id="title" aria-describedby="emailHelp" value="{{old('title')}}" required>
         </div>
         <div class="mb-3">
             <label for="description" class="form-label">Descrizione</label>
@@ -47,6 +47,21 @@
         
         <button type="submit" class="btn btn-primary">Crea</button>
     </form>
+
+    {{-- validazione non best-practice con elenco di errori a fondo pagina --}}
+    
+    @if($errors->any()) 
+
+        <div class="alert alert-danger my-2">
+            <ul>
+                @foreach($errors->all() as $error)
+                <li>
+                    {{$error}}
+                </li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
 </div>
 
